@@ -1,6 +1,6 @@
-function rez = datashift2(rez, do_correction)
+function rez = datashift2(rez, do_correction, opt_datashift)
 
-NrankPC = 6;
+NrankPC = opt_datashift.NrankPC;
 [wTEMP, wPCA]    = extractTemplatesfromSnippets(rez, NrankPC);
 rez.wTEMP = gather(wTEMP);
 rez.wPCA  = gather(wPCA);
@@ -44,14 +44,14 @@ end
 
 
 % binning width across Y (um)
-dd = 5;
+dd = opt_datashift.dd;%5;
 % min and max for the range of depths
 dmin = ymin - 1;
 dmax  = 1 + ceil((ymax-dmin)/dd);
 disp(dmax)
 
 
-spkTh = 10; % same as the usual "template amplitude", but for the generic templates
+spkTh = opt_datashift.spkTh;%10; % same as the usual "template amplitude", but for the generic templates
 
 % Extract all the spikes across the recording that are captured by the
 % generic templates. Very few real spikes are missed in this way. 

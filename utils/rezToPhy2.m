@@ -102,7 +102,8 @@ tempAmps(tids) = ta; % because ta only has entries for templates that had at lea
 gain = getOr(rez.ops, 'gain', 1);
 tempAmps = gain*tempAmps'; % for consistency, make first dimension template number
 
-if ~isempty(savePath)
+save_results = 1;
+if save_results == 1
     fileID = fopen(fullfile(savePath, 'cluster_KSLabel.tsv'),'w');
     fprintf(fileID, 'cluster_id%sKSLabel', char(9));
     fprintf(fileID, char([13 10]));
@@ -194,8 +195,7 @@ if ~isempty(savePath)
             [root, fname, ext] = fileparts(rez.ops.fproc);
         end
 %         fprintf(fid,['dat_path = ''',fname ext '''\n']);
-        fprintf(fid,['dat_path = ''', strrep(rez.ops.fproc, '\', '/') '''\n']);
-        
+        fprintf(fid,'dat_path = \"%s\"\n', rez.ops.fproc);
         fprintf(fid,'n_channels_dat = %i\n',rez.ops.Nchan);
         
         fprintf(fid,'dtype = ''int16''\n');
