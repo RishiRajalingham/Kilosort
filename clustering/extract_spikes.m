@@ -25,7 +25,7 @@ xmax = max(rez.xc);
 % rez.ops.dminx = dminx;
 % nx = round((xmax-xmin) / (dminx/2)) + 1;
 % rez.ops.xup = linspace(xmin, xmax, nx); % centers of the upsampled x positions
-% disp(rez.ops.xup) 
+% disp(rez.ops.xup)
 
 % rez.ops.yup = ymin:10:ymax; % centers of the upsampled y positions
 % rez.ops.xup = xmin +  [-16 0 16 32 48 64]; % centers of the upsampled x positions
@@ -73,6 +73,7 @@ nsp = 0;
 tF = zeros(NrankPC, NchanNear, 1e6, 'single');
 
 tic
+
 st3 = zeros(1000000, 6);
 
 for k = 1:ops.Nbatch
@@ -84,7 +85,7 @@ for k = 1:ops.Nbatch
         spikedetector3PC(Params, dataRAW, wTEMP, iC-1, dist, v2, iC2-1, dist2, wPCA);
 %     [dat, kkmax, st, cF] = ...
 %         spikedetector3(Params, dataRAW, wTEMP, iC-1, dist, v2, iC2-1, dist2);
-    
+
     ns = size(st,2);
     if nsp + ns>size(tF,3)
         tF(:,:,end + 1e6) = 0;
@@ -92,19 +93,34 @@ for k = 1:ops.Nbatch
     end
     
     toff = ops.nt0min + t0 + ops.NT *(k-1);
-    st(1,:) = st(1,:) + toff;
-    st = double(st);
-    st(5,:) = cF;
-    st(6,:) = k-1;
-    
-    st3(nsp + [1:ns], :) = gather(st)';    
-    
+    try
+        % GPU error when too few spikes?
+        st(1,:) = st(1,:) + toff;
+        st = double(st);
+        st(5,:) = cF;
+        st(6,:) = k-1;
+    catch ME
+        fprintf(1, 'rr - error in extract_spikes.m line 103');
+        disp(size(st));
+        disp(size(cF));
+        disp(ME);
+        continue;
+    end
+
+
+    st3(nsp + [1:ns], :) = gather(st)';
     tF(:, :, nsp + [1:ns]) = gather(feat);
     nsp = nsp + ns;
-    
+
     if rem(k,100)==1 || k==ops.Nbatch
         fprintf('%2.2f sec, %d batches, %d spikes \n', toc, k, nsp)
     end
+
+
+    
+
+    
+
 end
 tF = tF(:, :, 1:nsp);
 st3 = st3(1:nsp, :);
