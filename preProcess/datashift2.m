@@ -5,6 +5,8 @@ NrankPC = opt_datashift.NrankPC;
 rez.wTEMP = gather(wTEMP);
 rez.wPCA  = gather(wPCA);
 
+% ops_datashift make bin 1/4 of inter-contact
+
 ops = rez.ops;
 
 % The min and max of the y and x ranges of the channels
@@ -131,6 +133,8 @@ if getOr(ops, 'fig', 1)
     xlabel('time (sec)')
     ylabel('spike position (um)')
     title('Drift map')
+
+    % rishi, save figure here.
     
 end
 %%

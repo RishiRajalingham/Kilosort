@@ -8,9 +8,15 @@ kilosort_suffix = 'Kilosort'
 
 addpath(genpath([homepath,kilosort_suffix])) % path to kilosort folder
 addpath(genpath([homepath,'npy-matlab'])) % for converting to Phy
+high_cutoff = 0; % by default off
 
-ks_output_dname = '/ks3_output/';
-
+if high_cutoff == 1
+    ks_output_dname = '/ks3_output_th9/';
+    ops_th_2 = 9;
+else
+    ks_output_dname = '/ks3_output/';
+    ops_th_2 = 4;
+end
 display(data_dir)
 
 rootZ = data_dir; % the raw data binary file is in this folder
@@ -51,7 +57,7 @@ ops.nblocks    = 0; % blocks for registration. 0 turns it off, 1 does rigid regi
 % rishi edit: nblocks was 5
 
 % main parameter changes from Kilosort2.5 to v3.0
-ops.Th       = [9 4];
+ops.Th       = [9 ops_th_2];
 % rishi edit: was [9 9]
 
 % find the binary file

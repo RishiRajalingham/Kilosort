@@ -107,7 +107,6 @@ for k = 1:ops.Nbatch
         continue;
     end
 
-
     st3(nsp + [1:ns], :) = gather(st)';
     tF(:, :, nsp + [1:ns]) = gather(feat);
     nsp = nsp + ns;
