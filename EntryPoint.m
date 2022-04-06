@@ -96,6 +96,12 @@ function EntryPoint(data_dir, is_neuropxl, sort_option)
             case 2
                 ops_th_2 = 9;
                 auc = 0.8;
+            case 3
+                ops_th_2 = 4;
+                auc = 0.9;
+           case 4
+                ops_th_2 = 9;
+                auc = 0.9;
             otherwise
                 ops_th_2 = 4;
                 auc = 0.8;
